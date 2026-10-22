@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<title>Kompas Politik Malaysia</title>
+<meta name="description" content="Jawab 15 soalan dan lihat kedudukan politik anda berbanding PAS, UMNO, BERSATU, PKR, DAP, BERSAMA dan MUDA.">
+<meta property="og:title" content="Kompas Politik Malaysia">
+<meta property="og:description" content="15 soalan. Di mana kedudukan politik anda berbanding parti-parti Malaysia?">
+<meta property="og:image" content="og-image.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column; quiz cards stacked, result block with compass + meter below */
+:root{
+  --bg:#f6f6f2; --surface:#ffffff; --fg:#1d1f1c; --muted:#62655e; --line:#d9dad2;
+  --accent:#1f4fb3; --accent-soft:#e3eaf8; --danger:#b3261e;
+  --q-auth-l:#f47a7a; --q-auth-r:#46a6f5; --q-lib-l:#9be89b; --q-lib-r:#f2ef72;
+  --grid:rgba(0,0,0,.18); --axis:#1d1f1c; --dot-party:#2b2d29; --dot-user:#d6262b;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141613; --surface:#1d201c; --fg:#ecede6; --muted:#a3a69c; --line:#343830;
+  --accent:#8fb0f2; --accent-soft:#22304d; --danger:#f2a49e;
+  --q-auth-l:#c45f5f; --q-auth-r:#3a85c4; --q-lib-l:#6fb56f; --q-lib-r:#bdb94f;
+  --grid:rgba(0,0,0,.22); --axis:#ecede6; --dot-party:#111310; --dot-user:#ff5257; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141613; --surface:#1d201c; --fg:#ecede6; --muted:#a3a69c; --line:#343830;
+  --accent:#8fb0f2; --accent-soft:#22304d; --danger:#f2a49e;
+  --q-auth-l:#c45f5f; --q-auth-r:#3a85c4; --q-lib-l:#6fb56f; --q-lib-r:#bdb94f;
+  --grid:rgba(0,0,0,.22); --axis:#ecede6; --dot-party:#111310; --dot-user:#ff5257; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.5rem;margin:0;text-wrap:balance}
+.lede{color:var(--muted);margin:10px 0 0;max-width:62ch}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.progress{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.count{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;min-width:4.5ch;text-align:right}
+form{display:flex;flex-direction:column;gap:16px}
+fieldset{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:18px 18px 14px;margin:0;min-width:0}
+fieldset.missing{border-color:var(--danger)}
+legend{padding:0;font-weight:600;display:flex;gap:10px;float:left;width:100%;margin-bottom:12px}
+legend .n{color:var(--muted);font-variant-numeric:tabular-nums;min-width:2ch}
+.opts{clear:both;display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:7px;cursor:pointer;border:1px solid transparent}
+.opt:hover{background:var(--accent-soft)}
+.opt input{margin-top:5px;accent-color:var(--accent)}
+.opt:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+.opt .k{font-weight:600;min-width:1.2ch}
+.err{color:var(--danger);font-size:.9rem;margin:0}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+button{font:inherit;font-weight:600;padding:11px 20px;border-radius:8px;cursor:pointer;border:1px solid var(--accent)}
+.primary{background:var(--accent);color:var(--bg)}
+.ghost{background:transparent;color:var(--accent)}
+button:focus-visible,.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.result{display:flex;flex-direction:column;gap:18px;border-top:2px solid var(--fg);padding-top:24px}
+.verdict{font-family:var(--f-display);font-weight:700;font-size:clamp(1.6rem,5vw,2.2rem);line-height:1.1;margin:0;text-wrap:balance}
+.verdict.wait{color:var(--muted);font-size:1.2rem;font-family:var(--f-body);font-weight:500}
+.compass{width:100%;max-width:560px;align-self:center}
+.compass svg{width:100%;height:auto;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.stat b{display:block;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-size:.8rem}
+.meter{display:flex;flex-direction:column;gap:6px}
+.track{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--q-auth-l),var(--line) 50%,var(--q-auth-r))}
+.pin{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--dot-user);border:2px solid var(--surface);transform:translate(-50%,-50%);left:50%}
+.ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.note{font-size:.85rem;color:var(--muted);margin:0;max-width:65ch}
+p{margin:0}
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.brief-head{font-weight:600;font-size:1.05rem;text-wrap:balance}
+.brief-head b{font-family:var(--f-display)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">15 soalan · lebih kurang 5 minit</div>
+    <h1>Kompas Politik Malaysia</h1>
+    <p class="lede">Jawab 15 soalan tentang isu politik Malaysia. Anda akan dapat kedudukan pada kompas politik, berbanding tujuh parti utama. Jawapan dan kumpulan umur anda disimpan tanpa nama untuk tujuan statistik. Tiada nama, emel atau maklumat peribadi lain dikumpul.</p>
+  </header>
+
+  <div class="progress" aria-hidden="true"><div class="bar"><span id="bar"></span></div><div class="count" id="count">0/15</div></div>
+
+  <form id="quiz" novalidate></form>
+
+  <section class="result" id="result" aria-live="polite">
+    <div class="eyebrow">Keputusan</div>
+    <p class="verdict wait" id="verdict">Jawab semua soalan untuk lihat kedudukan anda. Carta di bawah menunjukkan kedudukan anggaran parti.</p>
+    <div class="brief" id="brief" hidden><p class="brief-head" id="briefHead"></p><p id="briefBody"></p></div>
+    <p id="summary"></p>
+    <div class="compass" id="compass"></div>
+    <div class="stats" id="stats" hidden></div>
+    <div class="meter" id="meter" hidden>
+      <div class="eyebrow">Paksi ekonomi (tidak ditunjuk dalam kompas)</div>
+      <div class="track"><span class="pin" id="pin"></span></div>
+      <div class="ends"><span>Campur tangan kerajaan</span><span>Pasaran bebas</span></div>
+    </div>
+    <div class="actions" id="after" hidden>
+      <button type="button" class="ghost" id="copy">Salin keputusan</button>
+      <button type="button" class="ghost" id="reset">Jawab semula</button>
+    </div>
+    <p class="note"><b>Kaedah.</b> Paksi kiri–kanan mengukur identiti dan nilai (pelbagai kaum dan progresif ke nasionalis dan konservatif). Paksi atas–bawah mengukur kuasa negara ke atas individu (undang-undang hasutan, penguatkuasaan agama, pemusatan kuasa). Soalan ekonomi diukur berasingan. Kedudukan parti ialah anggaran berdasarkan pendirian awam dan rekod, bukan skor rasmi, dan boleh dipertikaikan.</p>
+  </section>
+</div>
+
+<script>
+/* ================= TETAPAN (ubah di sini sahaja) =================
+   SHEET_URL : URL Web App dari Google Apps Script (langkah 3).
+               Biarkan "" kalau belum setup; kuiz tetap berfungsi tanpa simpan data.
+   AGE_GROUPS: pilihan kumpulan umur.
+   PARTIES   : kedudukan parti. x = kiri(-10) ke kanan(+10), y = libertarian(-10) ke autoritarian(+10).
+   pos       : (pilihan) letak label parti: "atas", "bawah", "kiri" atau "kanan".
+   Q         : soalan. x/y/e = markah setiap pilihan untuk paksi kiri-kanan / autoritarian / ekonomi.
+   ================================================================== */
+const SHEET_URL="https://script.google.com/macros/s/AKfycbwQyKHs7r6OSk8qpstmTJ5z81TR27w2y8Lz6g-h1VnUnT2BzRXXnBGMpxGn86CiVhnhgQ/exec";
+const AGE_GROUPS=["18–20","21–29","30–39","40–49","50–59","60 ke atas"];
+const PARTIES=[
+ {n:"PAS",x:9,y:8},{n:"BERSATU",x:7,y:5,pos:"atas"},{n:"UMNO",x:5.5,y:4.5},
+ {n:"PKR",x:-2,y:1},{n:"BERSAMA",x:-3,y:-3},{n:"DAP",x:-7,y:-2},{n:"MUDA",x:-7,y:-7}
+];
+const Q=[
+ {t:"Keistimewaan Bumiputera (Perkara 153 dan dasar berkaitan)",o:["Kekalkan dan perkukuhkan","Kekalkan, tapi sasarkan dengan lebih baik dalam kalangan Bumiputera","Tukar kepada bantuan berasaskan keperluan tanpa mengira kaum","Hapuskan dasar berasaskan kaum sepenuhnya"],x:[2,1,-1,-2]},
+ {t:"Peranan Islam dalam undang-undang dan pentadbiran",o:["Perluas skop undang-undang syariah, termasuk hudud jika boleh dilaksanakan","Kekalkan susunan sedia ada","Peranan Islam lebih simbolik, undang-undang kebanyakannya sekular","Negara sekular sepenuhnya"],x:[2,1,-1,-2],y:[2,1,-1,-2]},
+ {t:"Sekolah vernakular (SJKC/SJKT)",o:["Beralih kepada sistem satu aliran sekolah kebangsaan","Kekalkan, tapi tekankan lagi integrasi nasional","Kekalkan seperti sekarang","Kekalkan dan iktiraf UEC"],x:[2,1,-1,-2]},
+ {t:"Subsidi minyak dan barang keperluan",o:["Subsidi pukal untuk semua","Subsidi bersasar","Hapuskan secara berperingkat, ganti dengan bantuan tunai kepada golongan berpendapatan rendah","Hapuskan dan biar pasaran tentukan harga"],e:[-2,-1,1,2]},
+ {t:"Percukaian",o:["Perkenalkan semula GST untuk meluaskan asas cukai","Kekalkan SST dan luaskan secara terpilih","Kenakan cukai lebih tinggi kepada golongan kaya (keuntungan modal, harta pusaka)","Kurangkan cukai secara keseluruhan dan kecilkan perbelanjaan kerajaan"],e:[1,0,-2,2]},
+ {t:"Sabah dan Sarawak (MA63)",o:["Kekalkan kerajaan persekutuan yang kuat","Kembalikan hak MA63 secara berperingkat melalui rundingan","Kembalikan MA63 sepenuhnya, termasuk satu pertiga kerusi Parlimen dan kawalan hasil minyak","Autonomi jauh lebih luas, hampir seperti konfederasi"],y:[2,1,-1,-2]},
+ {t:"Akta Hasutan dan undang-undang berkaitan 3R (kaum, agama, raja)",o:["Kuatkuasakan dengan lebih tegas","Kekalkan, tapi laksanakan secara konsisten","Hadkan kepada hasutan untuk keganasan sahaja","Mansuhkan"],y:[2,1,-1,-2]},
+ {t:"Peranan Raja-Raja Melayu",o:["Peranan lebih aktif dan budi bicara lebih luas","Peranan perlembagaan sekarang sudah tepat","Kurangkan kepada peranan istiadat semata-mata","Terbuka untuk menilai semula institusi beraja dalam jangka panjang"],y:[2,1,-1,-2]},
+ {t:"Reformasi institusi (pemisahan peranan Peguam Negara dan Pendakwa Raya, had tempoh PM, akta pembiayaan politik)",o:["Bukan keutamaan; kestabilan dan pembangunan lebih penting","Perlu, tapi secara berperingkat","Mendesak; laksanakan sekarang"],y:[2,0,-2]},
+ {t:"Gaji dan buruh",o:["Gaji minimum lebih tinggi dan hak kesatuan sekerja lebih kukuh","Kenaikan gaji minimum secara sederhana dan berkala","Serahkan gaji kepada pasaran, fokus pada produktiviti"],e:[-2,0,2]},
+ {t:"Syarikat berkaitan kerajaan (GLC)",o:["Perluaskan sebagai alat pembangunan nasional dan Bumiputera","Kekalkan, tapi perbaiki tadbir urus","Kurangkan pemilikan kerajaan dan lepaskan pegangan secara berperingkat","Swastakan sebahagian besar"],e:[-2,-1,1,2]},
+ {t:"Isu LGBT",o:["Hukuman lebih berat","Kekalkan undang-undang sedia ada","Nyahjenayahkan, tapi tidak lebih dari itu","Perlindungan undang-undang penuh daripada diskriminasi"],x:[2,1,-1,-2]},
+ {t:"Komposisi kerajaan yang ideal",o:["Perpaduan parti Melayu-Islam didahulukan","Gabungan pelbagai kaum yang diterajui Melayu","Gabungan pelbagai kaum dengan perkongsian kuasa yang sebenar","Parti tanpa asas kaum sahaja"],x:[2,1,-1,-2]},
+ {t:"Pilihan raya kerajaan tempatan",o:["Kekalkan ahli majlis yang dilantik","Rintis pilihan raya di kawasan terpilih","Kembalikan pilihan raya di seluruh negara"],y:[2,0,-2]},
+ {t:"Penguatkuasaan moral oleh pihak berkuasa agama (serbuan khalwat, penguatkuasaan pakaian)",o:["Penguatkuasaan lebih tegas","Kekalkan tahap sekarang","Hadkan kepada kesalahan awam yang jelas sahaja","Hentikan penguatkuasaan moral"],y:[2,1,-1,-2]}
+];
+const L="ABCD";
+const form=document.getElementById("quiz");
+form.innerHTML=Q.map((q,i)=>`<fieldset id="f${i}"><legend><span class="n">${i+1}.</span><span>${q.t}</span></legend><div class="opts">${q.o.map((o,j)=>`<label class="opt" for="q${i}_${j}"><input type="radio" id="q${i}_${j}" name="q${i}" value="${j}"><span class="k">${L[j]}</span><span>${o}</span></label>`).join("")}</div></fieldset>`).join("")+
+`<fieldset id="fage"><legend><span class="n"></span><span>Kumpulan umur anda</span></legend><div class="opts"><select id="age" style="font:inherit;padding:10px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--fg)"><option value="">Pilih kumpulan umur</option>${AGE_GROUPS.map(a=>`<option value="${a}">${a}</option>`).join("")}</select>
+<label class="opt" for="consent"><input type="checkbox" id="consent"><span>Saya bersetuju jawapan saya disimpan tanpa nama untuk tujuan statistik.</span></label></div></fieldset>
+<p class="err" id="err" hidden></p><div class="actions"><button type="submit" class="primary" id="go">Lihat keputusan</button></div>`;
+
+const bar=document.getElementById("bar"),count=document.getElementById("count");
+function answers(){return Q.map((_,i)=>{const c=form.querySelector(`input[name=q${i}]:checked`);return c?+c.value:null})}
+function progress(){const n=answers().filter(v=>v!==null).length;bar.style.width=(n/15*100)+"%";count.textContent=n+"/15"}
+form.addEventListener("change",e=>{progress();if(e.target.id==="age"||e.target.id==="consent")document.getElementById("fage").classList.remove("missing");const f=e.target.closest("fieldset");if(f)f.classList.remove("missing");document.getElementById("err").hidden=true});
+
+function score(a){
+ let s={x:0,y:0,e:0},m={x:0,y:0,e:0};
+ Q.forEach((q,i)=>["x","y","e"].forEach(k=>{if(q[k]){s[k]+=q[k][a[i]];m[k]+=Math.max(...q[k].map(Math.abs))}}));
+ return {x:s.x/m.x*10,y:s.y/m.y*10,e:s.e/m.e*10};
+}
+function deg(v){const a=Math.abs(v);return a<3?"sedikit":a<6?"sederhana":a<8?"kuat":"ekstrem"}
+function label(r){
+ const cx=Math.abs(r.x)<2,cy=Math.abs(r.y)<2;
+ if(cx&&cy)return "Tengah (centrist)";
+ let lr=cx?"Tengah":(r.x>0?(r.x>=9?"Kanan jauh":r.x>=7?"Kanan":"Kanan-tengah"):(r.x<=-9?"Kiri jauh":r.x<=-7?"Kiri":"Kiri-tengah"));
+ let al=cy?"":(r.y>0?`, ${deg(r.y)} autoritarian`:`, ${deg(r.y)} libertarian`);
+ return lr+al;
+}
+function brief(a,r){
+ const xv=i=>Q[i].x[a[i]]/2, yv=i=>Q[i].y[a[i]]/2;
+ const id=(xv(0)+xv(2)+xv(12))/3, eco=r.e/10, ref=(yv(8)+yv(13))/2, spe=(yv(6)+yv(7))/2, soc=(xv(11)+yv(14))/2, q2=a[1];
+ const idT=id>=0.5?"Nasionalis Melayu":id>=0.15?"Condong nasionalis Melayu":id>-0.15?"Moderat dalam isu kaum":id>-0.5?"Condong pelbagai kaum":"Pendukung politik pelbagai kaum";
+ const ecoT=eco<=-0.3?"berhaluan pembangunan":eco>=0.3?"berhaluan pasaran bebas":"berekonomi tengah";
+ const relT=["Islamis dari segi undang-undang","mengekalkan peranan agama sedia ada","sekular dari segi undang-undang","sekular sepenuhnya"][q2];
+ const govT=ref<=-0.25?"reformis dari segi institusi":ref>=0.25?"mengutamakan kestabilan berbanding reformasi":"berhati-hati dalam reformasi";
+ const s=[];
+ if(id>=0.3&&q2>=2)s.push("Identiti politik anda lebih berasaskan bangsa dan negara berbanding agama. Ini gabungan yang agak jarang ditemui.");
+ else if(id>=0.3&&q2===0)s.push("Bagi anda, bangsa dan agama berjalan seiring. Ini aliran utama politik Melayu-Islam.");
+ else if(id>=0.3)s.push("Identiti politik anda berasaskan bangsa, dengan agama dikekalkan pada peranan sedia ada.");
+ else if(id<=-0.3&&q2<=1)s.push("Anda menolak politik kaum, tetapi masih mahu agama berperanan dalam undang-undang. Ini gabungan yang agak jarang ditemui.");
+ else if(id<=-0.3)s.push("Anda menolak politik kaum dan agama dalam undang-undang. Pendirian anda konsisten di sebelah progresif.");
+ else s.push("Anda tidak mengambil pendirian keras dalam isu kaum. Pilihan anda lebih banyak ditentukan oleh isu dan calon.");
+ if(soc>=0.5&&q2>=2)s.push("Anda konservatif dari segi nilai sosial walaupun sekular dari segi undang-undang.");
+ if(ref<=-0.25&&spe>=0.25)s.push("Anda mahu institusi dibersihkan, tetapi undang-undang ketenteraman dan peranan Raja dikekalkan.");
+ else if(ref>=0.25&&spe>=0.5)s.push("Anda mengutamakan kestabilan dan kuasa negara yang kukuh.");
+ else if(ref<=-0.25&&spe<=-0.5)s.push("Anda konsisten di sebelah kebebasan sivil: kuasa negara dikurangkan dan reformasi dipercepat.");
+ if(id>=0.3&&eco<=-0.3&&a[4]===2)s.push("Satu ketegangan: anda mahu keutamaan Melayu dan juga pengagihan semula berasaskan kelas. Cara anda mengimbangi kedua-duanya menentukan sama ada anda lebih ke kanan atau ke tengah.");
+ return {head:`${idT} ${ecoT}, ${relT}, dan ${govT}.`,body:s.slice(0,3).join(" ")};
+}
+function quad(r){return r.y>=0?(r.x>=0?"Kanan autoritarian":"Kiri autoritarian"):(r.x>=0?"Kanan libertarian":"Kiri libertarian")}
+
+function draw(user){
+ const S=560,P=60,C=(S-2*P)/20,px=v=>P+(v+10)*C,py=v=>P+(10-v)*C;
+ let g="";
+ for(let i=0;i<=20;i++){const p=P+i*C;g+=`<line x1="${p}" y1="${P}" x2="${p}" y2="${S-P}"/><line x1="${P}" y1="${p}" x2="${S-P}" y2="${p}"/>`}
+ const h=(S-2*P)/2;
+ let dots=PARTIES.map(p=>{const X=px(p.x),Y=py(p.y),pos=p.pos||(p.x>6?"kiri":"kanan"),tx=pos==="kiri"?X-10:pos==="kanan"?X+10:X,ty=pos==="atas"?Y-11:pos==="bawah"?Y+19:Y+4,an=pos==="kiri"?"end":pos==="kanan"?"start":"middle";return `<circle cx="${X}" cy="${Y}" r="6" fill="var(--dot-party)" stroke="#fff" stroke-width="1.5"/><text x="${tx}" y="${ty}" text-anchor="${an}" font-size="13" font-weight="600" fill="#111" stroke="rgba(255,255,255,.75)" stroke-width="3" paint-order="stroke">${p.n}</text>`}).join("");
+ let u="";
+ if(user){const X=px(user.x),Y=py(user.y),right=user.x>5;u=`<circle cx="${X}" cy="${Y}" r="10" fill="var(--dot-user)" stroke="#fff" stroke-width="2.5"/><text x="${right?X-15:X+15}" y="${Y+5}" text-anchor="${right?"end":"start"}" font-size="15" font-weight="700" fill="var(--dot-user)" stroke="#fff" stroke-width="3.5" paint-order="stroke">ANDA</text>`}
+ document.getElementById("compass").innerHTML=`<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="Kompas politik dengan kedudukan parti${user?" dan kedudukan anda":""}">
+ <rect x="${P}" y="${P}" width="${h}" height="${h}" fill="var(--q-auth-l)"/><rect x="${P+h}" y="${P}" width="${h}" height="${h}" fill="var(--q-auth-r)"/>
+ <rect x="${P}" y="${P+h}" width="${h}" height="${h}" fill="var(--q-lib-l)"/><rect x="${P+h}" y="${P+h}" width="${h}" height="${h}" fill="var(--q-lib-r)"/>
+ <g stroke="var(--grid)" stroke-width="1">${g}</g>
+ <line x1="${P+h}" y1="${P}" x2="${P+h}" y2="${S-P}" stroke="var(--axis)" stroke-width="2"/><line x1="${P}" y1="${P+h}" x2="${S-P}" y2="${P+h}" stroke="var(--axis)" stroke-width="2"/>
+ <g font-family="var(--f-display)" font-weight="700" font-size="16" fill="var(--muted)">
+ <text x="${S/2}" y="${P-12}" text-anchor="middle">Autoritarian</text><text x="${S/2}" y="${S-P+26}" text-anchor="middle">Libertarian</text>
+ <text x="${P-6}" y="${S/2+5}" text-anchor="end">Kiri</text>
+ <text x="${S-P+6}" y="${S/2+5}">Kanan</text></g>
+ ${dots}${u}</svg>`;
+}
+draw(null);
+
+let last="";
+form.addEventListener("submit",e=>{
+ e.preventDefault();
+ const a=answers(),miss=a.map((v,i)=>v===null?i:-1).filter(i=>i>=0);
+ const err=document.getElementById("err");
+ const age=document.getElementById("age").value,ok=document.getElementById("consent").checked;
+ if(!miss.length&&(!age||!ok)){document.getElementById("fage").classList.add("missing");err.textContent=!age?"Pilih kumpulan umur anda.":"Tandakan persetujuan untuk teruskan.";err.hidden=false;document.getElementById("fage").scrollIntoView({behavior:"smooth",block:"center"});return}
+ if(miss.length){miss.forEach(i=>document.getElementById("f"+i).classList.add("missing"));err.textContent=`Soalan ${miss.map(i=>i+1).join(", ")} belum dijawab.`;err.hidden=false;document.getElementById("f"+miss[0]).scrollIntoView({behavior:"smooth",block:"center"});return}
+ const r=score(a);
+ const near=PARTIES.map(p=>({...p,d:Math.hypot(p.x-r.x,p.y-r.y)})).sort((a,b)=>a.d-b.d);
+ const v=document.getElementById("verdict");v.classList.remove("wait");v.textContent=label(r);
+ const econ=Math.abs(r.e)<2?"tengah":r.e<0?(r.e<=-5?"kiri (pro campur tangan kerajaan)":"kiri-tengah"):(r.e>=5?"kanan (pro pasaran bebas)":"kanan-tengah");
+ document.getElementById("summary").textContent=`Kuadran: ${quad(r)}. Parti paling hampir dengan anda ialah ${near[0].n}, diikuti ${near[1].n}. Dari segi ekonomi, anda ${econ}.`;
+ draw(r);
+ if(SHEET_URL){try{fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({age,x:+r.x.toFixed(2),y:+r.y.toFixed(2),e:+r.e.toFixed(2),label:label(r),quadrant:quad(r),nearest:near[0].n,answers:a.map(v=>L[v]).join("")})}).catch(()=>{})}catch(_){}}
+ const b=brief(a,r);document.getElementById("briefHead").innerHTML="<b>Ringkasan:</b> "+b.head;document.getElementById("briefBody").textContent=b.body;document.getElementById("brief").hidden=false;
+ const st=document.getElementById("stats");st.hidden=false;
+ st.innerHTML=`<div class="stat"><small>Kiri–kanan</small><b>${r.x>0?"+":""}${r.x.toFixed(1)}</b></div><div class="stat"><small>Autoritarian–libertarian</small><b>${r.y>0?"+":""}${r.y.toFixed(1)}</b></div><div class="stat"><small>Ekonomi</small><b>${r.e>0?"+":""}${r.e.toFixed(1)}</b></div><div class="stat"><small>Parti terdekat</small><b>${near[0].n}</b></div>`;
+ document.getElementById("meter").hidden=false;document.getElementById("pin").style.left=((r.e+10)/20*100)+"%";
+ document.getElementById("after").hidden=false;
+ last=`Kompas Politik Malaysia: ${label(r)}. Ringkasan: ${b.head}`+" "+`(kiri–kanan ${r.x.toFixed(1)}, autoritarian–libertarian ${r.y.toFixed(1)}, ekonomi ${r.e.toFixed(1)}). Parti terdekat: ${near[0].n}.`;
+ document.getElementById("result").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("copy").addEventListener("click",ev=>{const b=ev.currentTarget;navigator.clipboard.writeText(last).then(()=>{b.textContent="Disalin"},()=>{const s=document.getElementById("summary");const rg=document.createRange();rg.selectNodeContents(s);getSelection().removeAllRanges();getSelection().addRange(rg);b.textContent="Teks dipilih, tekan salin"});setTimeout(()=>b.textContent="Salin keputusan",2000)});
+document.getElementById("reset").addEventListener("click",()=>{form.reset();form.querySelectorAll(".missing").forEach(f=>f.classList.remove("missing"));progress();draw(null);const v=document.getElementById("verdict");v.classList.add("wait");v.textContent="Jawab semua soalan untuk lihat kedudukan anda. Carta di bawah menunjukkan kedudukan anggaran parti.";document.getElementById("summary").textContent="";["stats","meter","after","brief"].forEach(id=>document.getElementById(id).hidden=true);window.scrollTo({top:0,behavior:"smooth"})});
+</script>
+</body>
+</html>
