@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <title>Kompas Politik Malaysia</title>
-<meta name="description" content="Jawab 15 soalan dan lihat kedudukan politik anda berbanding PAS, UMNO, BERSATU, PKR, DAP, BERSAMA dan MUDA.">
+<meta name="description" content="Jawab 20 soalan dan lihat kedudukan politik anda berbanding PAS, UMNO, BERSATU, PKR, DAP, BERSAMA dan MUDA.">
 <meta property="og:title" content="Kompas Politik Malaysia">
-<meta property="og:description" content="15 soalan. Di mana kedudukan politik anda berbanding parti-parti Malaysia?">
+<meta property="og:description" content="20 soalan. Di mana kedudukan politik anda berbanding parti-parti Malaysia?">
 <meta property="og:image" content="https://penditamaklum.github.io/kompas-politik/og-image.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -89,12 +89,12 @@ p{margin:0}
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">15 soalan · lebih kurang 5 minit</div>
+    <div class="eyebrow">20 soalan · lebih kurang 6 minit</div>
     <h1>Kompas Politik Malaysia</h1>
-    <p class="lede">Jawab 15 soalan tentang isu politik Malaysia. Anda akan dapat kedudukan pada kompas politik, berbanding tujuh parti utama. Jawapan dan kumpulan umur anda disimpan tanpa nama untuk tujuan statistik. Tiada nama, emel atau maklumat peribadi lain dikumpul.</p>
+    <p class="lede">Jawab 20 soalan tentang isu politik Malaysia. Anda akan dapat kedudukan pada kompas politik, berbanding tujuh parti utama. Jawapan dan kumpulan umur anda disimpan tanpa nama untuk tujuan statistik. Tiada nama, emel atau maklumat peribadi lain dikumpul.</p>
   </header>
 
-  <div class="progress" aria-hidden="true"><div class="bar"><span id="bar"></span></div><div class="count" id="count">0/15</div></div>
+  <div class="progress" aria-hidden="true"><div class="bar"><span id="bar"></span></div><div class="count" id="count">0/20</div></div>
 
   <form id="quiz" novalidate></form>
 
@@ -114,7 +114,7 @@ p{margin:0}
       <button type="button" class="ghost" id="copy">Salin keputusan</button>
       <button type="button" class="ghost" id="reset">Jawab semula</button>
     </div>
-    <p class="note"><b>Kaedah.</b> Paksi kiri–kanan mengukur identiti dan nilai (pelbagai kaum dan progresif ke nasionalis dan konservatif). Paksi atas–bawah mengukur kuasa negara ke atas individu (undang-undang hasutan, penguatkuasaan agama, pemusatan kuasa). Soalan ekonomi diukur berasingan. Kedudukan parti ialah anggaran berdasarkan pendirian awam dan rekod, bukan skor rasmi, dan boleh dipertikaikan.</p>
+    <p class="note"><b>Kaedah.</b> Paksi kiri–kanan mengukur identiti dan nilai (kaum, agama, pendidikan, gender). Paksi atas–bawah mengukur kuasa negara ke atas individu dan akauntabiliti (undang-undang hasutan, penguatkuasaan agama, pengampunan kes rasuah, KWSP). Susunan pilihan jawapan dirawak untuk setiap responden. Soalan ekonomi diukur berasingan. Kedudukan parti ialah anggaran berdasarkan pendirian awam dan rekod, bukan skor rasmi, dan boleh dipertikaikan.</p>
   </section>
 </div>
 
@@ -146,20 +146,27 @@ const Q=[
  {t:"Gaji dan buruh",o:["Gaji minimum lebih tinggi dan hak kesatuan sekerja lebih kukuh","Kenaikan gaji minimum secara sederhana dan berkala","Serahkan gaji kepada pasaran, fokus pada produktiviti"],e:[-2,0,2]},
  {t:"Syarikat berkaitan kerajaan (GLC)",o:["Perluaskan sebagai alat pembangunan nasional dan Bumiputera","Kekalkan, tapi perbaiki tadbir urus","Kurangkan pemilikan kerajaan dan lepaskan pegangan secara berperingkat","Swastakan sebahagian besar"],e:[-2,-1,1,2]},
  {t:"Isu LGBT",o:["Hukuman lebih berat","Kekalkan undang-undang sedia ada","Nyahjenayahkan, tapi tidak lebih dari itu","Perlindungan undang-undang penuh daripada diskriminasi"],x:[2,1,-1,-2]},
- {t:"Komposisi kerajaan yang ideal",o:["Perpaduan parti Melayu-Islam didahulukan","Gabungan pelbagai kaum yang diterajui Melayu","Gabungan pelbagai kaum dengan perkongsian kuasa yang sebenar","Parti tanpa asas kaum sahaja"],x:[2,1,-1,-2]},
+ {t:"Asas gabungan kerajaan yang ideal",o:["Parti berasaskan kaum dan agama bekerjasama, dengan kaum majoriti di hadapan","Satu kaum menerajui gabungan pelbagai kaum","Perkongsian kuasa sama rata antara kaum","Parti tanpa asas kaum sahaja"],x:[2,1,-1,-2]},
  {t:"Pilihan raya kerajaan tempatan",o:["Kekalkan ahli majlis yang dilantik","Rintis pilihan raya di kawasan terpilih","Kembalikan pilihan raya di seluruh negara"],y:[2,0,-2]},
- {t:"Penguatkuasaan moral oleh pihak berkuasa agama (serbuan khalwat, penguatkuasaan pakaian)",o:["Penguatkuasaan lebih tegas","Kekalkan tahap sekarang","Hadkan kepada kesalahan awam yang jelas sahaja","Hentikan penguatkuasaan moral"],y:[2,1,-1,-2]}
+ {t:"Penguatkuasaan moral oleh pihak berkuasa agama (serbuan khalwat, penguatkuasaan pakaian)",o:["Penguatkuasaan lebih tegas","Kekalkan tahap sekarang","Hadkan kepada kesalahan awam yang jelas sahaja","Hentikan penguatkuasaan moral"],y:[2,1,-1,-2]},
+ {t:"Kebebasan beragama (penggunaan kalimah Allah oleh bukan Islam, pertukaran agama)",o:["Dilarang sepenuhnya","Dibenarkan secara terhad, contohnya di Sabah dan Sarawak","Dibenarkan dalam kalangan penganut sendiri","Kebebasan penuh"],x:[2,1,-1,-2]},
+ {t:"Kuota 30% wanita dalam Kabinet dan lembaga pengarah syarikat",o:["Tidak perlu","Galakkan tanpa kuota","Sasaran sukarela","Kuota wajib"],x:[2,1,-1,-2]},
+ {t:"Najib Razak sedang menjalani hukuman kes SRC dan merayu sabitan kes 1MDB. Pendirian anda?",o:["Wajar dibebaskan sepenuhnya","Tahanan rumah sudah memadai","Wajar habiskan hukuman di penjara","Habiskan hukuman, dan tiada pengampunan untuk kes rasuah pada masa depan"],y:[2,1,-1,-2]},
+ {t:"Projek mega (contohnya ECRL, kereta api laju) untuk pembangunan",o:["Teruskan dan tambah projek mega sebagai pemacu ekonomi","Teruskan projek sedia ada, kaji teliti sebelum projek baharu","Utamakan projek kecil dan luar bandar, kurangkan hutang negara","Hentikan projek mega kerajaan, serahkan kepada pelaburan swasta"],e:[-2,-1,1,2]},
+ {t:"Simpanan KWSP",o:["Tiada pengeluaran awal langsung sebelum umur persaraan","Kekalkan Akaun Fleksibel dengan had sekarang","Benarkan pengeluaran lebih luas bila ahli memerlukan","Caruman jadi pilihan; individu urus wang sendiri"],y:[2,1,-1,-2]}
 ];
 const L="ABCD";
 const form=document.getElementById("quiz");
-form.innerHTML=Q.map((q,i)=>`<fieldset id="f${i}"><legend><span class="n">${i+1}.</span><span>${q.t}</span></legend><div class="opts">${q.o.map((o,j)=>`<label class="opt" for="q${i}_${j}"><input type="radio" id="q${i}_${j}" name="q${i}" value="${j}"><span class="k">${L[j]}</span><span>${o}</span></label>`).join("")}</div></fieldset>`).join("")+
+const shuf=n=>{const a=[...Array(n).keys()];for(let i=n-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const N=Q.length;
+form.innerHTML=Q.map((q,i)=>`<fieldset id="f${i}"><legend><span class="n">${i+1}.</span><span>${q.t}</span></legend><div class="opts">${shuf(q.o.length).map((j,k)=>`<label class="opt" for="q${i}_${j}"><input type="radio" id="q${i}_${j}" name="q${i}" value="${j}"><span class="k">${L[k]}</span><span>${q.o[j]}</span></label>`).join("")}</div></fieldset>`).join("")+
 `<fieldset id="fage"><legend><span class="n"></span><span>Kumpulan umur anda</span></legend><div class="opts"><select id="age" style="font:inherit;padding:10px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--fg)"><option value="">Pilih kumpulan umur</option>${AGE_GROUPS.map(a=>`<option value="${a}">${a}</option>`).join("")}</select>
 <label class="opt" for="consent"><input type="checkbox" id="consent"><span>Saya bersetuju jawapan saya disimpan tanpa nama untuk tujuan statistik.</span></label></div></fieldset>
 <p class="err" id="err" hidden></p><div class="actions"><button type="submit" class="primary" id="go">Lihat keputusan</button></div>`;
 
 const bar=document.getElementById("bar"),count=document.getElementById("count");
 function answers(){return Q.map((_,i)=>{const c=form.querySelector(`input[name=q${i}]:checked`);return c?+c.value:null})}
-function progress(){const n=answers().filter(v=>v!==null).length;bar.style.width=(n/15*100)+"%";count.textContent=n+"/15"}
+function progress(){const n=answers().filter(v=>v!==null).length;bar.style.width=(n/N*100)+"%";count.textContent=n+"/"+N}
 form.addEventListener("change",e=>{progress();if(e.target.id==="age"||e.target.id==="consent")document.getElementById("fage").classList.remove("missing");const f=e.target.closest("fieldset");if(f)f.classList.remove("missing");document.getElementById("err").hidden=true});
 
 function score(a){
